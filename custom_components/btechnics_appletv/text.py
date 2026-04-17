@@ -1,4 +1,4 @@
-#PLACEHOLDER_TEXTPY
+"""Text platform for Btechnics Apple TV Radio."""
 import logging
 
 from homeassistant.components import mqtt
