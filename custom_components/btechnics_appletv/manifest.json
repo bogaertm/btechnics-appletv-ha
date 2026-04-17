@@ -1,0 +1,10 @@
+{
+    "domain": "btechnics_appletv",
+    "name": "Btechnics Apple TV Radio",
+    "version": "1.0.0",
+    "documentation": "https://github.com/bogaertm/btechnics-appletv-ha",
+    "issue_tracker": "https://github.com/bogaertm/btechnics-appletv-ha/issues",
+    "dependencies": ["mqtt"],
+    "codeowners": ["@bogaertm"],
+    "iot_class": "local_push"
+}
