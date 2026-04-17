@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Btechnics Apple TV Radio",
+        "description": "This integration adds MQTT entities for the Btechnics Apple TV Radio app (radio control and camera popup)."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "This integration is already configured."
+    }
+  }
+}
