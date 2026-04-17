@@ -1,13 +1,11 @@
-"""Text platform for Btechnics Apple TV Radio."""
+#PLACEHOLDER_TEXTPY
 import logging
-
 
 from homeassistant.components import mqtt
 from homeassistant.components.text import TextEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
 
 from .const import (
     DOMAIN,
@@ -16,10 +14,7 @@ from .const import (
     MQTT_LIVE_URL_STATE,
 )
 
-
 _LOGGER = logging.getLogger(__name__)
-
-
 
 
 async def async_setup_entry(
@@ -31,16 +26,12 @@ async def async_setup_entry(
     async_add_entities([BtechnicsLiveURL(entry, i) for i in range(4)])
 
 
-
-
 class BtechnicsLiveURL(TextEntity):
     """Live stream URL input for Apple TV."""
-
 
     _attr_has_entity_name = True
     _attr_icon = "mdi:cctv"
     _attr_native_value = None
-
 
     def __init__(self, entry: ConfigEntry, index: int) -> None:
         """Initialize the text entity."""
@@ -51,12 +42,10 @@ class BtechnicsLiveURL(TextEntity):
         self._entry = entry
         self._available = False
 
-
     @property
     def available(self) -> bool:
         """Return if entity is available."""
         return self._available
-
 
     @property
     def device_info(self):
@@ -68,7 +57,6 @@ class BtechnicsLiveURL(TextEntity):
             "model": "Apple TV Radio App",
         }
 
-
     async def async_added_to_hass(self) -> None:
         """Subscribe to MQTT topics."""
         @callback
@@ -77,13 +65,11 @@ class BtechnicsLiveURL(TextEntity):
             self._attr_native_value = msg.payload
             self.async_write_ha_state()
 
-
         @callback
         def availability_received(msg):
             """Handle availability updates."""
             self._available = msg.payload.lower() in ("online", "true", "1")
             self.async_write_ha_state()
-
 
         await mqtt.async_subscribe(
             self.hass, MQTT_LIVE_URL_STATE[self._index], state_received
@@ -92,11 +78,10 @@ class BtechnicsLiveURL(TextEntity):
             self.hass, MQTT_AVAILABILITY, availability_received
         )
 
-
     async def async_set_value(self, value: str) -> None:
         """Set live URL via MQTT."""
         await mqtt.async_publish(
             self.hass, MQTT_LIVE_URL_SET[self._index], value
         )
         self._attr_native_value = value
-        self.async_write_ha_state()"""Text platform for Btechnics Apple TV Radio."""
+        self.async_write_ha_state()
