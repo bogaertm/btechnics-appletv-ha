@@ -9,15 +9,19 @@ MQTT_AVAILABILITY = f"{MQTT_BASE}/available"
 MQTT_STATION_SET = f"{MQTT_BASE}/station/set"
 MQTT_STATION_STATE = f"{MQTT_BASE}/station/state"
 
-MQTT_CAMERA_URL_SET = f"{MQTT_BASE}/camera/url/set"
-MQTT_CAMERA_URL_STATE = f"{MQTT_BASE}/camera/url/state"
+# Live URL topics (4 streams)
+MQTT_LIVE_URL_SET = [f"{MQTT_BASE}/live/url{i}/set" for i in range(1, 5)]
+MQTT_LIVE_URL_STATE = [f"{MQTT_BASE}/live/url{i}/state" for i in range(1, 5)]
 
+# Live show/hide topics
+MQTT_LIVE_SHOW = [f"{MQTT_BASE}/live/show{i}" for i in range(1, 5)]
+MQTT_LIVE_HIDE = f"{MQTT_BASE}/live/hide"
+
+# Camera duur
 MQTT_CAMERA_DURATION_SET = f"{MQTT_BASE}/camera/duration/set"
 MQTT_CAMERA_DURATION_STATE = f"{MQTT_BASE}/camera/duration/state"
 
-MQTT_CAMERA_SHOW = f"{MQTT_BASE}/camera/show"
-MQTT_CAMERA_HIDE = f"{MQTT_BASE}/camera/hide"
-
+# Radio stations
 RADIO_STATIONS = [
     "Studio Brussel",
     "MNM",
