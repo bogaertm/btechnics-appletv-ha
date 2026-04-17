@@ -1,13 +1,13 @@
 {
     "config": {
-            "step": {
-                        "user": {
-                                        "title": "Btechnics Apple TV Radio",
-                                                        "description": "Voegt MQTT entiteiten toe voor de Btechnics Apple TV Radio app (radiobediening en camera popup)."
-                                                                    }
-                                                                            },
-                                                                                    "abort": {
-                                                                                                "single_instance_allowed": "Deze integratie is al geconfigureerd."
-                                                                                                        }
-                                                                                                            }
-                                                                                                            }
+        "step": {
+            "user": {
+                "title": "Btechnics Apple TV Radio",
+                "description": "Klik op verzenden om de integratie toe te voegen."
+            }
+        },
+        "abort": {
+            "single_instance_allowed": "Al geconfigureerd. Slechts één configuratie mogelijk."
+        }
+    }
+}
