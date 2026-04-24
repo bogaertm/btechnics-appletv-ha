@@ -27,25 +27,22 @@ async def async_setup_entry(
     async_add_entities([BtechnicsRadioSelect(entry)])
 
 
+OFFLINE_STATUS = "App niet ingeschakeld"
+
+
 class BtechnicsRadioSelect(SelectEntity):
     """Radio station selector for Apple TV."""
 
     _attr_has_entity_name = True
     _attr_name = "Radio Magazijn"
     _attr_icon = "mdi:radio"
-    _attr_options = RADIO_STATIONS
-    _attr_current_option = None
+    _attr_options = [OFFLINE_STATUS] + RADIO_STATIONS
+    _attr_current_option = OFFLINE_STATUS
 
     def __init__(self, entry: ConfigEntry) -> None:
         """Initialize the select entity."""
         self._attr_unique_id = f"{DOMAIN}_radio_magazijn"
         self._entry = entry
-        self._available = False
-
-    @property
-    def available(self) -> bool:
-        """Return if entity is available."""
-        return self._available
 
     @property
     def device_info(self):
@@ -63,21 +60,25 @@ class BtechnicsRadioSelect(SelectEntity):
         def state_received(msg):
             """Handle state updates."""
             value = msg.payload
-            if value in self._attr_options:
+            if value in RADIO_STATIONS:
                 self._attr_current_option = value
                 self.async_write_ha_state()
 
         @callback
         def availability_received(msg):
             """Handle availability updates."""
-            self._available = msg.payload.lower() in ("online", "true", "1")
-            self.async_write_ha_state()
+            is_online = msg.payload.lower() in ("online", "true", "1")
+            if not is_online:
+                self._attr_current_option = OFFLINE_STATUS
+                self.async_write_ha_state()
 
         await mqtt.async_subscribe(self.hass, MQTT_STATION_STATE, state_received)
         await mqtt.async_subscribe(self.hass, MQTT_AVAILABILITY, availability_received)
 
     async def async_select_option(self, option: str) -> None:
         """Send selected station via MQTT."""
+        if option == OFFLINE_STATUS:
+            return
         await mqtt.async_publish(self.hass, MQTT_STATION_SET, option)
         self._attr_current_option = option
         self.async_write_ha_state()
