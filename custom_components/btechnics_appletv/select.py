@@ -60,7 +60,7 @@ class BtechnicsRadioSelect(SelectEntity):
         def state_received(msg):
             """Handle state updates."""
             value = msg.payload
-            if value in RADIO_STATIONS:
+            if value in RADIO_STATIONS or value == OFFLINE_STATUS:
                 self._attr_current_option = value
                 self.async_write_ha_state()
 

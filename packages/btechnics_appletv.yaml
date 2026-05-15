@@ -5,20 +5,44 @@
 # Plaats in: config/packages/btechnics_appletv.yaml
 #
 # Vereist: MQTT integratie met Mosquitto broker
+#
+# Versie: 1.2.3 - 4 live streams, fix select availability
 # ============================================================
+
+# ----------------------------------------------------------
+# Automation: stel select in op "App niet ingeschakeld"
+# wanneer de Apple TV onverwacht offline gaat (LWT trigger)
+# ----------------------------------------------------------
+automation:
+  - alias: "Apple TV Radio - Offline status"
+    id: btechnics_appletv_offline_status
+    trigger:
+      - platform: mqtt
+        topic: "btechnics/appletv/available"
+        payload: "offline"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "btechnics/appletv/station/state"
+          payload: "App niet ingeschakeld"
+          retain: true
 
 mqtt:
 
   # ----------------------------------------------------------
   # Radiobediening - zenderkeuze via dropdown
   # ----------------------------------------------------------
+  # GEEN availability_topic op de select!
+  # Anders toont HA een vraagteken als de Apple TV uit staat.
+  # In plaats daarvan: de Apple TV publiceert "App niet ingeschakeld"
+  # naar het state topic via LWT (MQTTManager) bij disconnect.
   select:
     - name: "Apple TV Radio Magazijn"
       unique_id: btechnics_appletv_radio_magazijn
       command_topic: "btechnics/appletv/station/set"
       state_topic: "btechnics/appletv/station/state"
-      availability_topic: "btechnics/appletv/available"
       options:
+        - "App niet ingeschakeld"
         - "Studio Brussel"
         - "MNM"
         - "Radio 1"
@@ -34,22 +58,43 @@ mqtt:
       icon: "mdi:radio"
 
   # ----------------------------------------------------------
-  # Camera popup - RTSP URL tekstveld
+  # Live streams - RTSP URL tekstvelden (4 streams)
   # ----------------------------------------------------------
   text:
-    - name: "Apple TV Camera URL"
-      unique_id: btechnics_appletv_camera_url
-      command_topic: "btechnics/appletv/camera/url/set"
-      state_topic: "btechnics/appletv/camera/url/state"
+    - name: "Apple TV Live URL 1"
+      unique_id: btechnics_appletv_live_url1
+      command_topic: "btechnics/appletv/live/url1/set"
+      state_topic: "btechnics/appletv/live/url1/state"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live URL 2"
+      unique_id: btechnics_appletv_live_url2
+      command_topic: "btechnics/appletv/live/url2/set"
+      state_topic: "btechnics/appletv/live/url2/state"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live URL 3"
+      unique_id: btechnics_appletv_live_url3
+      command_topic: "btechnics/appletv/live/url3/set"
+      state_topic: "btechnics/appletv/live/url3/state"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live URL 4"
+      unique_id: btechnics_appletv_live_url4
+      command_topic: "btechnics/appletv/live/url4/set"
+      state_topic: "btechnics/appletv/live/url4/state"
       availability_topic: "btechnics/appletv/available"
       icon: "mdi:cctv"
 
   # ----------------------------------------------------------
-  # Camera popup - duur schuifregelaar
+  # Live streams - duur schuifregelaar
   # ----------------------------------------------------------
   number:
-    - name: "Apple TV Camera Duur"
-      unique_id: btechnics_appletv_camera_duration
+    - name: "Apple TV Live Duur"
+      unique_id: btechnics_appletv_live_duration
       command_topic: "btechnics/appletv/camera/duration/set"
       state_topic: "btechnics/appletv/camera/duration/state"
       availability_topic: "btechnics/appletv/available"
@@ -60,17 +105,35 @@ mqtt:
       icon: "mdi:timer-outline"
 
   # ----------------------------------------------------------
-  # Camera popup - knoppen
+  # Live streams - knoppen (tonen + sluiten)
   # ----------------------------------------------------------
   button:
-    - name: "Apple TV Camera Tonen"
-      unique_id: btechnics_appletv_camera_show
-      command_topic: "btechnics/appletv/camera/show"
+    - name: "Apple TV Live 1 Tonen"
+      unique_id: btechnics_appletv_live_show1
+      command_topic: "btechnics/appletv/live/show1"
       availability_topic: "btechnics/appletv/available"
       icon: "mdi:cctv"
 
-    - name: "Apple TV Camera Sluiten"
-      unique_id: btechnics_appletv_camera_hide
-      command_topic: "btechnics/appletv/camera/hide"
+    - name: "Apple TV Live 2 Tonen"
+      unique_id: btechnics_appletv_live_show2
+      command_topic: "btechnics/appletv/live/show2"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live 3 Tonen"
+      unique_id: btechnics_appletv_live_show3
+      command_topic: "btechnics/appletv/live/show3"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live 4 Tonen"
+      unique_id: btechnics_appletv_live_show4
+      command_topic: "btechnics/appletv/live/show4"
+      availability_topic: "btechnics/appletv/available"
+      icon: "mdi:cctv"
+
+    - name: "Apple TV Live Sluiten"
+      unique_id: btechnics_appletv_live_hide
+      command_topic: "btechnics/appletv/live/hide"
       availability_topic: "btechnics/appletv/available"
       icon: "mdi:close-circle"
