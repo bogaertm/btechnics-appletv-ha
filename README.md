@@ -113,8 +113,9 @@ data:
 | Topic | Richting | Functie |
 |---|---|---|
 | `btechnics/appletv/available` | App → HA | online of offline (retained, Last Will) |
-| `btechnics/appletv/station/set` | HA → App | Zender kiezen |
-| `btechnics/appletv/station/state` | App → HA | Huidige zender |
+| `btechnics/appletv/station/set` | HA → App | Zender kiezen, of "Spotify" (sinds integratie 1.2.4): de app maakt Btechnics Play het actieve Spotify Connect toestel en hervat Spotify |
+| `btechnics/appletv/station/state` | App → HA | Huidige zender, of "Spotify" zolang de bron spotify is (retained) |
+| `btechnics/appletv/bron/fout` | App → HA | JSON met bron en reden als Spotify niet start (niet retained) |
 | `btechnics/appletv/nowplaying` | App → HA | JSON met artist, title, show, presenter, station, cover |
 | `btechnics/appletv/nowplaying/state` | App → HA | Artiest en titel als tekst |
 | `btechnics/appletv/nowplaying/cover` | App → HA | URL van de hoes |

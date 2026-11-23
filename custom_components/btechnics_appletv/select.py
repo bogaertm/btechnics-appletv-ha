@@ -28,6 +28,9 @@ async def async_setup_entry(
 
 
 OFFLINE_STATUS = "App niet ingeschakeld"
+# Sinds 1.2.4: Spotify via Spotify Connect naar Btechnics Play. De app aanvaardt
+# "Spotify" op station/set en zet station/state op "Spotify" zolang de bron spotify is.
+SPOTIFY = "Spotify"
 
 
 class BtechnicsRadioSelect(SelectEntity):
@@ -36,7 +39,7 @@ class BtechnicsRadioSelect(SelectEntity):
     _attr_has_entity_name = True
     _attr_name = "Radio Magazijn"
     _attr_icon = "mdi:radio"
-    _attr_options = [OFFLINE_STATUS] + RADIO_STATIONS
+    _attr_options = [OFFLINE_STATUS, SPOTIFY] + RADIO_STATIONS
     _attr_current_option = OFFLINE_STATUS
 
     def __init__(self, entry: ConfigEntry) -> None:
@@ -60,7 +63,9 @@ class BtechnicsRadioSelect(SelectEntity):
         def state_received(msg):
             """Handle state updates."""
             value = msg.payload
-            if value in RADIO_STATIONS or value == OFFLINE_STATUS:
+            if isinstance(value, str) and value.strip().lower() == SPOTIFY.lower():
+                value = SPOTIFY
+            if value in RADIO_STATIONS or value in (OFFLINE_STATUS, SPOTIFY):
                 self._attr_current_option = value
                 self.async_write_ha_state()
 
